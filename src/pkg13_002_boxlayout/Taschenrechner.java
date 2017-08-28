@@ -13,12 +13,14 @@ import java.util.ArrayList;
  */
 class Taschenrechner {
     
-    private ArrayList<Rechenoperation> list = new ArrayList();
+    private ArrayList<String> list = new ArrayList();
 
     public Taschenrechner() {
         
-      //  list.add();
+        list.add(new Plus().getSymbol());
+        list.add(new Minus().getSymbol());
     }
+    
     
     
     

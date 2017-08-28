@@ -10,10 +10,12 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -23,23 +25,24 @@ import javax.swing.JTextField;
  */
 class GUI {
 
-    
     private JFrame f = new JFrame();
     private JPanel mainPanel = new JPanel(new GridLayout(0, 1));
     private JPanel rechenPanel = new JPanel(new FlowLayout());
     private JTextField ersteZahl = new JTextField();
     private JTextField zweiteZahl = new JTextField();
     private String[] zeichenArray = {"+", "-"};
-    private JComboBox rechenzeichen = new JComboBox(zeichenArray);
+    private JComboBox rechenzeichen = new JComboBox();
     private JButton rechenButton = new JButton("=");
     private JButton deleteButton = new JButton("Löschen");
 
     void start() {
 
-        
         rechenPanel.add(ersteZahl);
+        rechenzeichen.addItem(new Plus().getSymbol().toString());
+        rechenzeichen.addItem(new Minus().getSymbol().toString());
         rechenPanel.add(rechenzeichen);
         rechenPanel.add(zweiteZahl);
+        
         rechenButton.setAction(new RechenButtonAction());
         rechenPanel.add(rechenButton);
         mainPanel.add(rechenPanel);
@@ -51,37 +54,60 @@ class GUI {
         f.pack();
     }
 
-    private  class DeleteButtonAction extends AbstractAction {
-
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            
-            
-        }
-
-        
-    }
+    
 
     private class RechenButtonAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            int ergebnis = 0;
-            JTextField ergebnisText = new JTextField();
-            ergebnisText.setText(ergebnis + "");
+            int a, b = 0;
+            
+            try{
+                
+                a = Integer.parseInt(ersteZahl.getText());
+                b = Integer.parseInt(zweiteZahl.getText());
+                
+            } catch (NumberFormatException ex){
+                
+                System.err.println("Nur Zahlen eingeben");
+                        return;
+            }
             
             JPanel ergebnisPanel = new JPanel();
-            Taschenrechner tr = new Taschenrechner();
-            ergebnisPanel.add(ergebnisText);
-            deleteButton.setAction(new DeleteButtonAction());
-            ergebnisPanel.add(new JButton(new DeleteButtonAction()));
+            ergebnisPanel.setLayout(new BoxLayout(ergebnisPanel, BoxLayout.X_AXIS));
+            String ergebnis = String.valueOf(((Rechenoperation) rechenzeichen.getSelectedItem()).rechne(a, b));
+            
+            JLabel antwortLabel = new JLabel(ergebnis);
+            JButton del = new JButton();
+            del.setAction(new DeleteButtonAction());
+            del.setText("Löschen");
+            
+            ergebnisPanel.add(antwortLabel);
+            ergebnisPanel.add(del);
             f.add(ergebnisPanel);
+            
             f.pack();
-            
-            
+
         }
 
-        
     }
 
+    
+    private class DeleteButtonAction extends AbstractAction {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+
+            JButton del = (JButton) ae.getSource();
+            del.getParent().removeAll();
+            
+            
+            mainPanel.setSize(mainPanel.getPreferredSize());
+            mainPanel.revalidate();
+            mainPanel.getTopLevelAncestor().validate();
+            mainPanel.repaint();
+            f.pack();
+        }
+
+    }
 }
