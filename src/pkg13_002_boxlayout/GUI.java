@@ -36,10 +36,9 @@ class GUI {
     private JButton deleteButton = new JButton("Löschen");
 
     void start() {
-
         rechenPanel.add(ersteZahl);
-        rechenzeichen.addItem(new Plus().getSymbol().toString());
-        rechenzeichen.addItem(new Minus().getSymbol().toString());
+        rechenzeichen.addItem(new Plus());
+        rechenzeichen.addItem(new Minus());
         rechenPanel.add(rechenzeichen);
         rechenPanel.add(zweiteZahl);
         
@@ -75,8 +74,8 @@ class GUI {
             
             JPanel ergebnisPanel = new JPanel();
             ergebnisPanel.setLayout(new BoxLayout(ergebnisPanel, BoxLayout.X_AXIS));
-            String ergebnis = String.valueOf(((Rechenoperation) rechenzeichen.getSelectedItem()).rechne(a, b));
-            
+            String ergebnis = String.valueOf(((Rechenoperation) rechenzeichen.getSelectedItem()).rechne(a, b)); 
+
             JLabel antwortLabel = new JLabel(ergebnis);
             JButton del = new JButton();
             del.setAction(new DeleteButtonAction());
@@ -84,7 +83,7 @@ class GUI {
             
             ergebnisPanel.add(antwortLabel);
             ergebnisPanel.add(del);
-            f.add(ergebnisPanel);
+            mainPanel.add(ergebnisPanel);
             
             f.pack();
 
@@ -99,13 +98,8 @@ class GUI {
         public void actionPerformed(ActionEvent ae) {
 
             JButton del = (JButton) ae.getSource();
-            del.getParent().removeAll();
-            
-            
-            mainPanel.setSize(mainPanel.getPreferredSize());
-            mainPanel.revalidate();
-            mainPanel.getTopLevelAncestor().validate();
-            mainPanel.repaint();
+            //del.getParent().removeAll();
+            del.getParent().getParent().remove(del.getParent());
             f.pack();
         }
 
