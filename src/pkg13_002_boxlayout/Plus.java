@@ -22,5 +22,9 @@ public class Plus implements Rechenoperation {
     public String getSymbol() {
         return "+";
     }
+    @Override
+    public String toString(){
+        return getSymbol();
+    }
 
 }
