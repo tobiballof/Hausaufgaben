@@ -14,8 +14,9 @@ import java.util.ArrayList;
 class Insertion implements Sortierer{
 
     @Override
-    public ArrayList<Integer> sortiere(ArrayList<Integer> list) {
-        
+    public ArrayList<Integer> sortiere(ArrayList<Integer> xlist) {
+                ArrayList<Integer> list = ((ArrayList<Integer>) xlist.clone());
+
         int sort;
         for(int i = 0; i<list.size(); i++){
             
